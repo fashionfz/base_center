@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link  rel="shortcut icon"  href="images/link.ico">
+	<meta charset="UTF-8">
+	<title>目录服务器</title>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache"> 
+	<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> 
+	<META HTTP-EQUIV="Expires" CONTENT="0"> 
+
+
+	<style>a{text-decoration:none;color:#444444}</style>
+	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="css/icon.css">
+	<link rel="stylesheet" type="text/css" href="themes/icon.css">
+	<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/ajax-override.js"></script>
+</head>
+<body id="cc" class="easyui-layout">
+	<div id="menuCtx" data-options="region:'north',border:false" style="height:120px;background:#ffffff;padding:0px">
+	    <div style="padding:0px;border:1px solid #ddd;margin-top:0px;height:90px;">
+           <iframe id="top" src="top.jsp" frameborder="no" height="100%" width="100%" scrolling="no"></iframe>
+	    </div>
+	    <div id="menu" style="padding:0px;border:1px solid #ddd;margin-top:0px;background:#ffffff">
+	    </div>
+	</div>
+	
+	<div data-options="region:'west',split:true,title:'导航'" style="width:150px;padding:0px;">
+        <div id="daohang" class="easyui-accordion" data-options="fit:true,border:false"> 
+        </div>	
+	</div>
+	
+	<div id="content" data-options="region:'center',title:'工作区'">
+	   <iframe id="center" src="" frameborder="no" width="100%" scrolling="no" 
+	   style="margin-top: -4px;"  
+	   height="100%"></iframe>
+	</div>
+</body>
+</html>

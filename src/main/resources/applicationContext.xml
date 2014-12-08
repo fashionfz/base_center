@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:drools="http://drools.org/schema/drools-spring"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+     
+     
+
+
+     <context:annotation-config />  
+     <context:component-scan base-package="com.digisky.service.impl"/>
+     <context:component-scan base-package="com.digisky.log.impl"/>
+     <context:component-scan base-package="com.digisky.dao.impl"/>
+
+
+     
+     	<!-- 加载连接池配置文件 -->
+	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:c3p0.properties</value>
+		</property>
+	</bean>
+     
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		 <property name="driverClass"><value>${ds1.driverClass}</value> </property>
+		<property name="jdbcUrl"><value>${ds1.jdbcUrl}</value></property>
+		<property name="properties">
+			<props>
+				<prop key="user">${ds1.user}</prop>
+				<prop key="password">${ds1.password}</prop>
+				<prop key="c3p0.min_size">${c3p0.min_size}</prop>
+				<prop key="c3p0.max_size">${c3p0.max_size}</prop>
+				<prop key="c3p0.timeout">${c3p0.timeout}</prop>
+				<prop key="c3p0.acquire_increment">${c3p0.acquire_increment}</prop>
+				<prop key="c3p0.max_statements">${c3p0.max_statements}</prop>
+				<prop key="c3p0.idle_test_period">${c3p0.idle_test_period}</prop>
+			</props>
+		</property>
+		<property name="testConnectionOnCheckin"><value>true</value></property>
+		<property name="idleConnectionTestPeriod"><value>60</value></property>    
+	</bean>
+     
+	 <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	 	<property name="dataSource" ref="dataSource" />
+	 	<property name="packagesToScan" value="com.digisky.po"/>
+	 	<property name="hibernateProperties">
+	 		<props>
+	 		    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+	 			<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+	 			<prop key="hibernate.show_sql">true</prop>
+	 			<prop key="hibernate.hbm2ddl.auto">update</prop> 
+	 		</props>
+	 	</property>
+     </bean>
+     
+    <bean
+        class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
+        p:ignoreDefaultModelOnRedirect="true">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                    <property name="objectMapper"> 
+                        <bean class="org.codehaus.jackson.map.ObjectMapper"> 
+							<property name="dateFormat"> 
+								<bean class="java.text.SimpleDateFormat"> 
+								    <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"></constructor-arg> 
+								</bean> 
+							</property> 
+						</bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean> 
+
+     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">   
+        <property name="sessionFactory" ref="sessionFactory"/>   
+    </bean>
+    
+    
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	    <property name="defaultErrorView"><value>forward:exception.do?flag=defaultException</value></property>
+	    <property name="exceptionMappings">
+	       <props>
+	           <prop key="com.digisky.exception.DirException">forward:exception.do?flag=MyException</prop>
+	           <prop key="org.springframework.security.access.AccessDeniedException">forward:exception.do?flag=AccessDeniedException</prop>
+	           <prop key="javax.xml.bind.JAXBException">forward:exception.do?flag=XmlException</prop>
+	           <prop key="java.sql.SQLException">forward:exception.do?flag=DbException</prop> 
+	           <prop key="java.lang.RuntimeException">forward:exception.do?flag=RuntimeException</prop>
+	       </props>
+	    </property>
+	</bean>	
+    
+    <bean id="optLogAOP" class="com.digisky.log.OptLogAop"></bean>
+	<aop:config>
+		<aop:aspect ref="optLogAOP">
+		<aop:pointcut id="optPointcut" expression="execution(* com.digisky.service.impl.*.*(..))"/>
+		<aop:before pointcut-ref="optPointcut" method="optLogBefore"/>
+		<aop:after pointcut-ref="optPointcut" method="optLogAfter"/>
+		<aop:after-throwing pointcut-ref="optPointcut" method="exceptionLog" throwing="ex"/>
+		</aop:aspect>
+	</aop:config>
+    
+    
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+    
+    <tx:annotation-driven/>
+
+</beans>

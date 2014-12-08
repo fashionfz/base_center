@@ -1,0 +1,15 @@
+ .icon-server{
+ background:url('../images/server.gif') no-repeat center center;
+ }     
+.icon-user{
+ background:url('../images/dbrmanage.gif') no-repeat center center;
+ }   
+ .icon-role{
+ background:url('../images/addservice.png') no-repeat center center;
+ }     
+ .icon-menu{
+ background:url('../images/rolemenu.gif') no-repeat center center;
+ }   
+ .icon-system{
+ background:url('../images/weihu.gif') no-repeat center center;
+ }   

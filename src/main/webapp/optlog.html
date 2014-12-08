@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>操作日志</title>
+<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="themes/icon.css">
+<link rel="stylesheet" type="text/css" href="css/button.css">
+<script type="text/javascript" src="js/jquery-1.8.0.min.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="js/jquery.easyui.min.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="js/optlog.js" charset="utf-8"></script>
+<script type="text/javascript" src="locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="js/date.js"
+	charset="utf-8"></script>
+	<script type="text/javascript" src="js/menu.js"></script>
+</head>
+<body onload="query()">
+	<div class="easyui-panel" title="查询输入" style="overflow: auto; padding: 0px">
+		<div style="padding: 20px 0 10px 10px; text-align: center">
+				<table id="tabQuery" style="width: 95%">
+					<tr>
+						<td style="width: 10%">对象名称:</td>
+						<td style="width: 40%">
+							<input type="text" name="menuName" style="width: 100%"></input>
+						</td>
+						<td style="width: 10%">用户名称:</td>
+						<td style="width: 40%">
+							<input type="text" name="userName" style="width: 100%"></input>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+							<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="query()">查 询</a>
+						</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+
+
+	<div title="日志列表" data-options="iconCls:'icon-ok'"
+		style="overflow: auto; padding: 0px">
+		<table id="dg" style="height: 330px" singleSelect="true"
+			nowrap="false" fitColumns="true" title="日志列表">
+		</table>
+	</div>
+</body>
+</html>

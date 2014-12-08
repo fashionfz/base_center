@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>服务器管理</title>
+<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="themes/icon.css">
+<link rel="stylesheet" type="text/css" href="css/button.css">
+<script type="text/javascript" src="js/jquery-1.8.0.min.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="js/jquery.easyui.min.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="js/server.js" charset="utf-8"></script>
+<script type="text/javascript" src="locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="js/date.js"
+	charset="utf-8"></script>
+	<script type="text/javascript" src="js/menu.js"></script>
+</head>
+<body onload="query()">
+	<div class="easyui-panel" title="查询输入" style="overflow: auto; padding: 0px">
+		<div style="padding: 20px 0 10px 10px; text-align: center">
+				<table id="tabQuery" style="width: 95%">
+					<tr>
+						<td style="width: 10%">服务器名称:</td>
+						<td style="width: 25%">
+							<input type="text" name="serverName" style="width: 100%"></input>
+						</td>
+						<td style="width: 10%">游戏类型:</td>
+						<td style="width: 25%">
+							<input id="gameName" class="easyui-combobox" valueField="value" textField="value" url="getGameNameList.do"   value="请选择" name="gameName" panelHeight="auto" style="width:300px;">
+						</td>
+						<td style="width: 10%">服务器状态:</td>
+						<td style="width: 25%">
+							<input id="queryStatus" class="easyui-combobox" valueField="key" textField="value" url="getDictionary.do?code=SERVER_STATUS&isFull=false" value="-1" name="status" panelHeight="auto" style="width:300px;">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="query()">查 询</a>
+						</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+
+
+	<div title="服务器列表" data-options="iconCls:'icon-ok'"
+		style="overflow: auto; padding: 0px">
+		<table id="dg" style="height: 330px" singleSelect="true"
+			nowrap="false" fitColumns="true" title="服务器列表">
+		</table>
+	</div>
+	
+	
+        <!-- 弹出框 -->
+    <div id="w" class="easyui-window" title="编辑状态" data-options="modal:true,closed:true,iconCls:'icon-save'" style="width:400px;height:150px;padding:10px;">
+        <form id="frmServer" method="post">
+            <table>
+                <tr>
+                    <td></td>
+                    <td><input class="easyui-validatebox" type="hidden" name="id" data-options="required:false" style="width:270px;"></input></td>
+                </tr>               
+                <tr>
+                    <td>服务器名称:</td>
+                    <td><input class="easyui-validatebox" type="text" name="serverName" data-options="required:true" readonly="true" style="width:270px;"></input></td>
+                </tr>                                                             
+                <tr>
+                    <td>状态:</td>
+                    <td><input class="easyui-combobox" valueField="key" textField="value" url="getDictionary.do?code=SERVER_STATUS&isFull=false" name="status" panelHeight="auto" style="width:273px;">
+                    </td>
+                </tr>  
+                <tr>
+                    <td colspan="2" align="center"><a href="#" onclick="saveStatus()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>&nbsp;&nbsp;
+                    <a href="#" class="easyui-linkbutton" onclick="closeW()" data-options="iconCls:'icon-cancel'">关闭</a></td>
+                </tr>                                           
+            </table>
+        </form>
+    </div>
+    
+</body>
+</html>
